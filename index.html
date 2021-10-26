@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Fly to a location based on scroll position</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js"></script>
+  <style>
+  body { margin: 0; padding: 0; }
+  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+  <style>
+  #map {
+    position: fixed;
+    width: 50%;
+  }
+  #features {
+    width: 50%;
+    margin-left: 50%;
+    font-family: sans-serif;
+    overflow-y: scroll;
+    background-color: #fafafa;
+  }
+  section {
+    padding: 25px 50px;
+    line-height: 25px;
+    border-bottom: 1px solid #ddd;
+    opacity: 0.25;
+    font-size: 13px;
+  }
+  section.active {
+    opacity: 1;
+  }
+  section:last-child {
+    border-bottom: none;
+    margin-bottom: 200px;
+  }
+</style>
+
+<div id="map"></div>
+<div id="features">
+  <section id="french" class="active">
+    <h3>The French, 1700's</h3>
+    <p>
+Bidets are a French invention, dreamed up by furniture makers there in the late
+ 1600s.
+    </p>
+  </section>
+  <section id="english">
+    <h3>The English</h3>
+    <p>
+      The English — not a fan of the French back then — summarily rejected it,
+      considering the plumbing somehow immoral or unclean or hedonistic.
+    </p>
+  </section>
+  <section id="Americans">
+    <h3>USA</h3>
+    <p>
+Early American colonists, heavily influenced by their British heritage picked up
+ on the disdain for this concept and considered it immoral.
+    </p>
+  </section>
+  <section id="japan">
+    <h3>Japan</h3>
+    <p>
+As of 2019, 75-90% of homes in Japan use Bidets.
+    </p>
+  </section>
+  <section id="south-korea">
+    <h3>South Korea</h3>
+    <p>
+40-50%
+    </p>
+  </section>
+  <section id="ocean">
+    <h3>Arabian Sea</h3>
+    <p>
+.
+    </p>
+  </section>
+  <section id="DEWA">
+    <h3>DEWA Jebel Ali Power Plant & Desalination Complex</h3>
+    <p>
+      From the Ocean to the Tap
+
+      The water gets tested for pH, turbidity, and any chlorine dioxide left
+      over from treatment. Then it’s transferred to reservoirs en route to the
+      city. The Dubai Energy and Water Authority (DEWA), which ­operates the
+      plant, services 666,430 customers with water as of December 2016, most of
+      them residential. Currently, the total capacity of the plant is 564
+      million gallons a day, but demand is growing, so an expansion to
+      accommodate an additional 48 million gallons is underway.
+    </p>
+  </section>
+  <section id="dubai">
+    <h3>Dubai</h3>
+    <p>
+.
+
+    </p>
+
+  </section>
+  <section id="test">
+    <h3>Test</h3>
+    <p>
+
+    </p>
+
+  </section>
+
+</section>
+<section id="test2">
+  <h3>Test 2</h3>
+  <p>
+
+  </p>
+
+</section>
+
+</section>
+<section id="test2">
+  <h3>Test 2</h3>
+  <p>
+
+  </p>
+
+</section>
+
+<section id="test3">
+  <h3>Test3</h3>
+  <p>
+
+  </p>
+
+</section>
+
+<section id="test4">
+  <h3>Test3</h3>
+  <p>
+
+  </p>
+
+</section>
+
+
+
+<section id="test5">
+  <h3>Test5</h3>
+  <p>
+
+  </p>
+
+</section>
+</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoidHJlZWZhbGxkb3duIiwiYSI6ImNrYmlwNWkzaDBmYmgyeWswcTVsa3ZvMmUifQ.K98vl28x9Km5pWBpKL_opQ';
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/satellite-streets-v10',
+  center: [1.8883335, 46.603354],
+  zoom: 17,
+  bearing: 27,
+  pitch: 45
+});
+
+const chapters = {
+  'french': {
+    bearing: 27,
+    center: [1.8883335, 46.603354],
+    zoom:6,
+    pitch: 20
+  },
+  'english': {
+    duration: 6000,
+    center: [-3.2765753, 54.7023545],
+    bearing: 150,
+    zoom: 7,
+    pitch: 0
+  },
+  'Americans': {
+    bearing: 90,
+    center: [-100.445882, 39.7837304],
+    zoom: 4,
+    speed: 0.6,
+    pitch: 40
+  },
+  'japan': {
+    bearing: 90,
+    center: [139.2394179, 36.5748441],
+    zoom: 5
+  },
+  'south-korea': {
+    bearing: 45,
+    center: [127.6961188, 36.638392],
+    zoom: 7,
+    pitch: 20,
+    speed: 0.5
+  },
+  'ocean': {
+    bearing: 45,
+    center: [54.71603393554688, 26.011126781744576],
+    zoom: 12.3
+
+  },
+  'DEWA': {
+    bearing: 90,
+    center: [55.11649030349508, 25.0570539],
+    zoom: 12,
+    pitch: 40
+  },
+  'dubai': {
+    bearing: 90,
+    center: [55.17471313476563, 25.081245674080453],
+    zoom: 7,
+    pitch: 20
+  },
+  'test': {
+    bearing: 90,
+    center: [15.12416858, 88.50779757],
+    zoom: 14.3,
+    pitch: 20
+  },
+  'test2': {
+    bearing: 90,
+    center: [300.12416858, 99.50779757],
+    zoom: 14.3,
+    pitch: 20
+  },
+  'test3': {
+    bearing: 90,
+    center: [300.12416858, 99.50779757],
+    zoom: 14.3,
+    pitch: 20
+  },
+  'test4': {
+    bearing: 90,
+    center: [300.12416858, 99.50779757],
+    zoom: 14.3,
+    pitch: 20
+  },
+  'test5': {
+    bearing: 90,
+    center: [300.12416858, 99.50779757],
+    zoom: 14.3,
+    pitch: 20
+  }
+};
+
+
+
+/////marker
+
+let marker = new mapboxgl.Marker()
+marker.setLngLat([55.11649030349508, 25.0570539])
+marker.addTo(map)
+
+
+
+
+let activeChapterName = 'baker';
+function setActiveChapter(chapterName) {
+  if (chapterName === activeChapterName) return;
+
+  map.flyTo(chapters[chapterName]);
+
+  document.getElementById(chapterName).classList.add('active');
+  document.getElementById(activeChapterName).classList.remove('active');
+
+  activeChapterName = chapterName;
+}
+
+function isElementOnScreen(id) {
+  const element = document.getElementById(id);
+  const bounds = element.getBoundingClientRect();
+  return bounds.top < window.innerHeight && bounds.bottom > 0;
+}
+
+// On every scroll event, check which element is on screen
+window.onscroll = () => {
+  for (const chapterName in chapters) {
+    if (isElementOnScreen(chapterName)) {
+      setActiveChapter(chapterName);
+      break;
+    }
+  }
+};
+</script>
+
+</body>
+</html>
